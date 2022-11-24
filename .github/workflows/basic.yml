@@ -17,6 +17,11 @@ jobs:
         with:
           fetch-depth: 1
 
+      - name: Install Golang
+        uses: actions/setup-go@v3
+        with:
+          go-version: '>=1.19.0'
+
       - name: Install OPA command line tool
         run: |
           curl -L -o opa https://openpolicyagent.org/downloads/v0.42.2/opa_linux_amd64_static
