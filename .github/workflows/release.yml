@@ -1,7 +1,8 @@
 name: Cut Release
 
 on:
-  create:
+  release:
+    types: [published]
 
 jobs:
   build-and-push-images:
@@ -14,9 +15,12 @@ jobs:
         name: Login to Docker Hub
         uses: docker/login-action@v2
         with:
-          registry: ghcr.io
-          username: ${{github.actor}}
-          password: ${{secrets.GITHUB_TOKEN}}
+          # registry: ghcr.io
+          # username: ${{github.actor}}
+          # password: ${{secrets.GITHUB_TOKEN}}
+          registry: docker.io
+          username: ${{secrets.DOCKERHUB_USERNAME}}
+          password: ${{secrets.DOCKERHUB_TOKEN}}
       -
         name: Build and push attestation-service
         uses: docker/build-push-action@v4
@@ -25,7 +29,8 @@ jobs:
           file: ./Dockerfile.as
           platforms: linux/amd64
           push: true
-          tags: ghcr.io/confidential-containers/attestation-service:latest, ghcr.io/confidential-containers/attestation-service:v${{ github.ref_name }}
+          # tags: ghcr.io/confidential-containers/attestation-service:latest, ghcr.io/confidential-containers/attestation-service:v${{ github.ref_name }}
+          tags: docker.io/xynnn007/attestation-service:latest, docker.io/xynnn007/attestation-service:v${{ github.ref_name }}
       -
         name: Build and push reference-value-provider-service
         uses: docker/build-push-action@v4
@@ -34,4 +39,5 @@ jobs:
           file: ./Dockerfile.rvps
           platforms: linux/amd64
           push: true
-          tags: ghcr.io/confidential-containers/reference-value-provider-service:latest, ghcr.io/confidential-containers/reference-value-provider-service:v${{ github.ref_name }}
+          # tags: ghcr.io/confidential-containers/reference-value-provider-service:latest, ghcr.io/confidential-containers/reference-value-provider-service:v${{ github.ref_name }}
+          tags: docker.io/xynnn007/reference-value-provider-service:latest, docker.io/xynnn007/reference-value-provider-service:v${{ github.ref_name }}
