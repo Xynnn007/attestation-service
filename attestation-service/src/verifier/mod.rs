@@ -5,9 +5,6 @@ use kbs_types::{Attestation, Tee};
 
 pub mod sample;
 
-#[cfg(feature = "az-snp-vtpm-verifier")]
-pub mod az_snp_vtpm;
-
 #[cfg(feature = "tdx-verifier")]
 pub mod tdx;
 
@@ -16,16 +13,7 @@ pub mod sgx;
 
 pub(crate) fn to_verifier(tee: &Tee) -> Result<Box<dyn Verifier + Send + Sync>> {
     match tee {
-        Tee::Sev | Tee::Snp | Tee::Cca => todo!(),
-        Tee::AzSnpVtpm => {
-            cfg_if::cfg_if! {
-                if #[cfg(feature = "az-snp-vtpm-verifier")] {
-                    Ok(Box::<az_snp_vtpm::AzSnpVtpm>::default() as Box<dyn Verifier + Send + Sync>)
-                } else {
-                    todo!()
-                }
-            }
-        }
+        Tee::Sev | Tee::Snp | Tee::Cca | Tee::AzSnpVtpm => todo!(),
         Tee::Tdx => {
             cfg_if::cfg_if! {
                 if #[cfg(feature = "tdx-verifier")] {
